@@ -1,15 +1,9 @@
 pipeline {
   agent any
   stages {
-    stage('Build') {
+    stage('Launch Instance') {
       steps {
-        echo 'Building'
-      }
-    }
-
-    stage('Test') {
-      steps {
-        echo 'Testing'
+        sh 'aws ec2 run-instances --launch-template LaunchTemplateId=lt-02e4b99fe1eecdcf6,Version=2'
       }
     }
 
