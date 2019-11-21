@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Launch Instance') {
       steps {
-        sh '''aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query \'Reservations[].Instances[].InstanceId\' --filters "Name=tag:name,Values= Webserver" --output text)
+        sh '''aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --region us-east-1 --query \'Reservations[].Instances[].InstanceId\' --filters "Name=tag:name,Values= Webserver" --output text)
 aws ec2 run-instances --region us-east-1 --launch-template LaunchTemplateId=lt-02e4b99fe1eecdcf6,Version=3'''
       }
     }
