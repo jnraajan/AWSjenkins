@@ -38,13 +38,23 @@ pipeline {
         sh 'echo Unit test'
       }
     }
-
+    stage('Bronze Build') {
+      steps {
+        sleep 1
+        sh 'echo Bronze Image'
+      }
+    }
     stage('Functional tests') {
       steps {
         sh 'echo Functional tests'
       }
     }
-
+  stage('Silver Build') {
+      steps {
+        sleep 1
+        sh 'echo Silver Image'
+      }
+    }
     stage('Deploy') {
       steps {
         withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'SMNLLCEC2', \
