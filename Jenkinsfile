@@ -1,36 +1,64 @@
 pipeline {
   agent any
   stages {
-    stage('Terminate Instance') {
+    stage('Clean') {
       steps {
-        sh '''aws ec2 terminate-instances --region us-east-1 --instance-ids $(aws ec2 describe-instances --region us-east-1 --query \'Reservations[].Instances[].InstanceId\' --filters "Name=tag:name,Values= Webserver" --output text)
-'''
+        sh 'echo Clean'
       }
     }
 
-    stage('Wait to Terminate Instance') {
+    stage('Build') {
       steps {
-        sleep 60
+        sh 'echo Build'
+        sleep 3
       }
     }
 
-    stage('Create Instance') {
+    stage('Checkstyle') {
       steps {
-        sh 'aws ec2 run-instances --region us-east-1 --launch-template LaunchTemplateId=lt-02e4b99fe1eecdcf6,Version=3'
+        sh 'echo Checkstyle'
       }
     }
 
-    stage('Wait for Instance Creation') {
+    stage('Find bugs') {
       steps {
-        sleep 60
+        sh 'echo Find bugs'
       }
     }
 
-    stage('Send Email') {
+    stage('OWASP') {
       steps {
-        emailext(subject: 'Instance Launched', body: 'The instance has been launched', attachLog: true, from: 'jnraajan@gmail.com', to: 'jnraajan@gmail.com')
+        sh 'echo OWASP'
       }
     }
 
+    stage('Unit test') {
+      steps {
+        sleep 1
+        sh 'echo Unit test'
+      }
+    }
+
+    stage('Functional tests') {
+      steps {
+        sh 'echo Functional tests'
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'SMNLLCEC2', \
+                                                             keyFileVariable: 'SSH_KEY_FOR_EC2')]) {
+          sh 'ls -lrt'
+          sh 'scp -i $SSH_KEY_FOR_EC2 -oStrictHostKeyChecking=no index.html ec2-user@54.242.8.242:/var/www/html'
+        }
+      }
+    }
+
+    //stage('Send Email') {
+      //steps {
+      //  emailext(subject: 'Instance Launched', body: 'The instance has been launched', attachLog: true, from: 'jnraajan@gmail.com', to: 'jnraajan@gmail.com')
+      //}
+    //}
   }
 }
