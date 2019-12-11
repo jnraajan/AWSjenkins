@@ -31,17 +31,22 @@ pipeline {
         sh 'echo OWASP'
       }
     }
-
+    stage('Bronze Build') {
+      steps {
+        sleep 1
+        sh 'echo Bronze Image'
+      }
+    }
     stage('Unit test') {
       steps {
         sleep 1
         sh 'echo Unit test'
       }
     }
-    stage('Bronze Build') {
+    stage('Silver Build') {
       steps {
         sleep 1
-        sh 'echo Bronze Image'
+        sh 'echo Silver Image'
       }
     }
     stage('Functional tests') {
@@ -49,10 +54,10 @@ pipeline {
         sh 'echo Functional tests'
       }
     }
-  stage('Silver Build') {
+  stage('Gold Build') {
       steps {
         sleep 1
-        sh 'echo Silver Image'
+        sh 'echo Gold Image'
       }
     }
     stage('Deploy') {
